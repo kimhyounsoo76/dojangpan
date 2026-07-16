@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_bg"
+    android:padding="14dp">
+
+    <TextView
+        android:id="@+id/w_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="8dp"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="#171B2E"
+        android:text="오늘 할 복습" />
+
+    <LinearLayout
+        android:id="@+id/w_row0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/w_dot0"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="#3B4664" />
+
+        <TextView
+            android:id="@+id/w_lab0"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="신규" />
+
+        <TextView
+            android:id="@+id/w_val0"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#171B2E"
+            android:text="—" />
+
+        <TextView
+            android:id="@+id/w_chk0"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="○" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/w_dot1"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="#0E7C86" />
+
+        <TextView
+            android:id="@+id/w_lab1"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="1일" />
+
+        <TextView
+            android:id="@+id/w_val1"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#171B2E"
+            android:text="—" />
+
+        <TextView
+            android:id="@+id/w_chk1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="○" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/w_dot2"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="#A96400" />
+
+        <TextView
+            android:id="@+id/w_lab2"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="1주" />
+
+        <TextView
+            android:id="@+id/w_val2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#171B2E"
+            android:text="—" />
+
+        <TextView
+            android:id="@+id/w_chk2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="○" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/w_dot3"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="#7A3E9D" />
+
+        <TextView
+            android:id="@+id/w_lab3"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="1달" />
+
+        <TextView
+            android:id="@+id/w_val3"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#171B2E"
+            android:text="—" />
+
+        <TextView
+            android:id="@+id/w_chk3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="○" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/w_row4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <View
+            android:id="@+id/w_dot4"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="8dp"
+            android:background="#B3261E" />
+
+        <TextView
+            android:id="@+id/w_lab4"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="#B3261E"
+            android:text="다시" />
+
+        <TextView
+            android:id="@+id/w_val4"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="#171B2E"
+            android:text="—" />
+
+        <TextView
+            android:id="@+id/w_chk4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:textSize="17sp"
+            android:text="○" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/w_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:textSize="13sp"
+        android:textColor="#9AA1B5"
+        android:visibility="gone"
+        android:text="오늘은 할 복습이 없습니다" />
+
+</LinearLayout>
