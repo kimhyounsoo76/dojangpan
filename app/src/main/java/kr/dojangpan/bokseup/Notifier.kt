@@ -84,6 +84,44 @@ object Notifier {
         }
     }
 
+    /** 단계형: 오늘 몫 중 안 한 것만 */
+    private fun notifyPhase(ctx: Context, s: org.json.JSONObject) {
+        if (Plan.ensure(s)) Store.write(ctx, s.toString())
+
+        val t = Schedule.todayISO()
+        val start = s.optString("start", "")
+        if (start.isNotEmpty() && t < start) return
+
+        val parts = ArrayList<String>()
+        for (ph in Plan.phases(s)) {
+            val open = Plan.todayOpen(s, ph.key)
+            if (open.isEmpty()) continue
+            val tt = Plan.blockTitle(s, open)
+            parts.add(ph.name + "  " + Plan.brief(open, 6) + (if (tt.isNotEmpty()) "  " + tt else ""))
+        }
+        if (parts.isEmpty()) return
+
+        val dday = Schedule.examDDay(s)
+        val title = "오늘 남은 공부" + (if (dday != null && dday >= 0) "  ·  시험 D-" + dday else "")
+
+        val pi = PendingIntent.getActivity(
+            ctx, 1, Intent(ctx, MainActivity::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val n = NotificationCompat.Builder(ctx, CHANNEL)
+            .setSmallIcon(R.drawable.ic_stat)
+            .setContentTitle(title)
+            .setContentText(parts.joinToString("  ·  "))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(parts.joinToString("\n")))
+            .setAutoCancel(true)
+            .setContentIntent(pi)
+            .build()
+        try {
+            (ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(NOTI_ID, n)
+        } catch (e: SecurityException) {
+        }
+    }
+
     /** 알림이 실제로 뜨는지 지금 바로 확인 */
     fun testNotify(ctx: Context) {
         channel(ctx)
@@ -109,6 +147,7 @@ object Notifier {
     fun notifyNow(ctx: Context) {
         channel(ctx)
         val s = Store.read(ctx)
+        if (Plan.isOn(s)) { notifyPhase(ctx, s); return }
         val total = s.optInt("total", 60)
         val per = s.optInt("per", 3)
         val day = Schedule.dayIndex(s.optString("start", Schedule.todayISO()))
@@ -122,7 +161,7 @@ object Notifier {
 
         val parts = ArrayList<String>()
         var late = 0
-        for (st in Schedule.STAGES) {
+        for (st in Schedule.stages(s)) {
             val od = Schedule.overdue(s, day, st)
             late += od.size
             for (b in od) parts.add(line(st.short, b, "  (밀림)"))
@@ -132,7 +171,7 @@ object Notifier {
         }
         for (r in Schedule.redoDue(s, day)) {
             val b = Schedule.blockOf(r.first)
-            val st = Schedule.stageOf(r.first)
+            val st = Schedule.stageOf(s, r.first)
             parts.add(line("다시", b, if (st != null) "  (" + st.label + ")" else ""))
         }
         if (parts.isEmpty()) return
