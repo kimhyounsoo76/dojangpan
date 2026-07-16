@@ -548,11 +548,12 @@
 
     if(!c.open.length){
       var nx = nextThing();
-      var done = c.done.length;
-      wrap.innerHTML = '<div class="clear"><b>'+(done ? '오늘 할 일을 다 했습니다' : '오늘은 할 복습이 없습니다')+'</b>'+
-        '<p>'+(nx ? '다음은 <em>'+esc(nx)+'</em>' : '모든 일정이 끝났습니다')+'</p></div>';
+      var el = document.createElement('div');
+      el.className = 'clear';
+      el.innerHTML = '<b>'+(c.done.length ? '오늘 할 일을 다 했습니다' : '오늘은 할 복습이 없습니다')+'</b>'+
+        '<p>'+(nx ? '다음은 <em>'+esc(nx)+'</em>' : '모든 일정이 끝났습니다')+'</p>';
+      wrap.appendChild(el);
       $('tip').innerHTML='';
-      return;
     }
 
     c.open.forEach(function(it){
@@ -606,7 +607,9 @@
       wrap.appendChild(b);
     });
 
-    $('tip').innerHTML = '동그라미를 <b>길게 누르면</b> 「막힘」으로 표시되고 '+REDO_GAP+'일 뒤에 한 번 더 나옵니다.';
+    if(c.open.length){
+      $('tip').innerHTML = '동그라미를 <b>길게 누르면</b> 「막힘」으로 표시되고 '+REDO_GAP+'일 뒤에 한 번 더 나옵니다.';
+    }
   }
 
   function renderExamWarn(){
