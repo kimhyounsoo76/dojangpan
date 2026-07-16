@@ -49,7 +49,8 @@ class Widget : AppWidgetProvider() {
         private val ROWS = intArrayOf(R.id.w_row0, R.id.w_row1, R.id.w_row2, R.id.w_row3)
         private val DOTS = intArrayOf(R.id.w_dot0, R.id.w_dot1, R.id.w_dot2, R.id.w_dot3)
         private val LABS = intArrayOf(R.id.w_lab0, R.id.w_lab1, R.id.w_lab2, R.id.w_lab3)
-        private val VALS = intArrayOf(R.id.w_val0, R.id.w_val1, R.id.w_val2, R.id.w_val3)
+        private val NUMS = intArrayOf(R.id.w_num0, R.id.w_num1, R.id.w_num2, R.id.w_num3)
+        private val TTS  = intArrayOf(R.id.w_tt0,  R.id.w_tt1,  R.id.w_tt2,  R.id.w_tt3)
         private val CHKS = intArrayOf(R.id.w_chk0, R.id.w_chk1, R.id.w_chk2, R.id.w_chk3)
 
         fun refresh(ctx: Context) {
@@ -76,6 +77,7 @@ class Widget : AppWidgetProvider() {
                 head.append(if (dday > 0) "D-" + dday else if (dday == 0) "D-DAY" else "지남")
             }
             rv.setTextViewText(R.id.w_head, head.toString())
+            rv.setTextColor(R.id.w_head, 0xFF99A0B2.toInt())
 
             var shown = 0
 
@@ -96,12 +98,10 @@ class Widget : AppWidgetProvider() {
                 rv.setTextViewText(LABS[i], st.label)
                 rv.setTextColor(LABS[i], st.color)
 
-                val t = Schedule.blockTitle(s, b)
-                val text = Schedule.label(b, total, per) +
-                    (if (isLate) "  밀림" else "") +
-                    (if (t.isNotEmpty()) "   " + t else "")
-                rv.setTextViewText(VALS[i], text)
-                rv.setTextColor(VALS[i], if (isLate) 0xFFB3261E.toInt() else 0xFF171B2E.toInt())
+                rv.setTextViewText(NUMS[i], Schedule.label(b, total, per))
+                rv.setTextColor(NUMS[i], if (isLate) 0xFFC0362C.toInt() else 0xFF14172A.toInt())
+                rv.setTextViewText(TTS[i], if (isLate) "밀림" else Schedule.blockTitle(s, b))
+                rv.setTextColor(TTS[i], if (isLate) 0xFFC0362C.toInt() else 0xFF99A0B2.toInt())
 
                 val done = Schedule.blockDone(s, b, st.key)
                 rv.setTextViewText(CHKS[i], if (done) "✓" else "○")
@@ -132,12 +132,11 @@ class Widget : AppWidgetProvider() {
                 val b = Schedule.blockOf(k)
                 val st = Schedule.stageOf(k)
                 val t = Schedule.blockTitle(s, b)
-                val more = if (redo.size > 1) "  +" + (redo.size - 1) else ""
+                val more = if (redo.size > 1) " +" + (redo.size - 1) else ""
+                rv.setTextViewText(R.id.w_num4, Schedule.label(b, total, per) + more)
                 rv.setTextViewText(
-                    R.id.w_val4,
-                    Schedule.label(b, total, per) +
-                        (if (st != null) " (" + st.label + ")" else "") +
-                        more + (if (t.isNotEmpty()) "   " + t else "")
+                    R.id.w_tt4,
+                    (if (st != null) st.label + (if (t.isNotEmpty()) " · " else "") else "") + t
                 )
                 rv.setTextViewText(R.id.w_chk4, "○")
                 rv.setTextColor(R.id.w_chk4, 0xFFB0B7C6.toInt())

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">복습 도장판</string>
+    <string name="widget_desc">오늘 할 복습을 보여주고 바로 체크합니다</string>
 </resources>
