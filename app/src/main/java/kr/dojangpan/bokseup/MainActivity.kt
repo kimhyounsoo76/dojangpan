@@ -11,11 +11,14 @@ import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
 import android.webkit.JavascriptInterface
+import android.webkit.JsResult
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -74,6 +77,30 @@ class MainActivity : AppCompatActivity() {
         web.settings.domStorageEnabled = true
         web.settings.textZoom = 100
         web.webViewClient = WebViewClient()
+
+        // 이게 없으면 confirm()/alert() 창이 아예 뜨지 않고,
+        // confirm() 은 무조건 false 를 돌려준다 → 「지우기」·「밀기」가 먹통이 된다.
+        web.webChromeClient = object : WebChromeClient() {
+            override fun onJsAlert(v: WebView?, url: String?, msg: String?, r: JsResult): Boolean {
+                AlertDialog.Builder(this@MainActivity)
+                    .setMessage(msg ?: "")
+                    .setPositiveButton("확인") { _, _ -> r.confirm() }
+                    .setOnCancelListener { r.cancel() }
+                    .show()
+                return true
+            }
+
+            override fun onJsConfirm(v: WebView?, url: String?, msg: String?, r: JsResult): Boolean {
+                AlertDialog.Builder(this@MainActivity)
+                    .setMessage(msg ?: "")
+                    .setPositiveButton("계속") { _, _ -> r.confirm() }
+                    .setNegativeButton("취소") { _, _ -> r.cancel() }
+                    .setOnCancelListener { r.cancel() }
+                    .show()
+                return true
+            }
+        }
+
         web.addJavascriptInterface(Bridge(), "Android")
         web.loadUrl("file:///android_asset/index.html")
 
