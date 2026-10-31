@@ -1,0 +1,87 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches: [ main, floatclock-ios ]
+    paths-ignore:
+      - 'dist/**'
+      - 'logs/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+  HOMEBREW_NO_INSTALL_CLEANUP: "1"
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Xcode version
+        run: xcodebuild -version
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build (unsigned)
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -project FloatClock.xcodeproj \
+            -scheme FloatClock \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build 2>&1 | tee build.log
+
+      - name: Package IPA
+        run: |
+          APP=build/Build/Products/Release-iphoneos/FloatClock.app
+          test -d "$APP"
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$APP/Info.plist")
+          NAME="FloatClock_iOS_v${VERSION}_$(date +%Y-%m-%d).ipa"
+          rm -rf Payload && mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qr "$NAME" Payload
+          ls -la "$NAME"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FloatClock-ipa
+          path: "*.ipa"
+
+      # 결과물(.ipa)과 실패 시 로그를 같은 브랜치의 dist/, logs/ 폴더에 올려 둬요
+      - name: Save results to branch
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -rf dist logs
+          mkdir -p dist
+          if ls *.ipa >/dev/null 2>&1; then
+            cp *.ipa dist/
+            echo "success" > dist/STATUS
+          else
+            echo "failed" > dist/STATUS
+            mkdir -p logs
+            if [ -f build.log ]; then
+              grep -nE "error:|error |warning:|\*\* BUILD|xcodegen" build.log | head -400 > logs/build-errors.log || true
+              tail -c 400000 build.log > logs/build-tail.log || true
+            fi
+          fi
+          git add -A dist logs
+          git commit -m "build #${{ github.run_number }}: ${{ job.status }} [skip ci]" || exit 0
+          git pull --rebase origin "${{ github.ref_name }}" || true
+          git push origin "HEAD:${{ github.ref_name }}"

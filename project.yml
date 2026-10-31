@@ -1,0 +1,63 @@
+name: FloatClock
+options:
+  bundleIdPrefix: kr.personal
+  deploymentTarget:
+    iOS: "15.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGNING_ALLOWED: "NO"
+    CODE_SIGNING_REQUIRED: "NO"
+    CODE_SIGN_IDENTITY: ""
+    DEVELOPMENT_TEAM: ""
+schemes:
+  FloatClock:
+    build:
+      targets:
+        FloatClock: all
+    run:
+      config: Debug
+    archive:
+      config: Release
+targets:
+  FloatClock:
+    type: application
+    platform: iOS
+    sources:
+      - path: FloatClock/Sources
+      - path: FloatClock/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: kr.personal.floatclock
+        PRODUCT_NAME: FloatClock
+        TARGETED_DEVICE_FAMILY: "1,2"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_BITCODE: "NO"
+        SUPPORTS_MACCATALYST: "NO"
+    info:
+      path: FloatClock/Info.plist
+      properties:
+        CFBundleDisplayName: 떠 있는 시계
+        CFBundleDevelopmentRegion: ko
+        CFBundleLocalizations: [ko]
+        LSRequiresIPhoneOS: true
+        ITSAppUsesNonExemptEncryption: false
+        UIBackgroundModes: [audio]
+        UILaunchScreen: {}
+        UIRequiresFullScreen: true
+        UIStatusBarStyle: UIStatusBarStyleLightContent
+        UIViewControllerBasedStatusBarAppearance: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
